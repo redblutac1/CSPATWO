@@ -13,4 +13,9 @@
       <module name="demo" target="18" />
     </bytecodeTargetLevel>
   </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="demo" options="--add-exports com.fasterxml.jackson.annotation/org.openscience.cdk.exception=com.example.demo --add-exports com.fasterxml.jackson.annotation/org.openscience.cdk.inchi=com.example.demo --add-exports com.fasterxml.jackson.annotation/org.openscience.cdk=com.example.demo --add-exports com.fasterxml.jackson.annotation/org.openscience.cdk.interfaces=com.example.demo --add-exports com.fasterxml.jackson.annotation/org.openscience.cdk.depict=com.example.demo" />
+    </option>
+  </component>
 </project>
