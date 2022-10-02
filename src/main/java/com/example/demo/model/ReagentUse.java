@@ -5,27 +5,34 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
 
 public class ReagentUse {
+    private Reagent reagent;
+    private Amount amount = null;
 
-    private String inchi;
-    private String name;
-    private IAtomContainer molecule;
-    private double amount;
-    private String units;
-
-    public ReagentUse(IAtomContainer molecule, String name, String inchi, double amount, String units) {
-        this.molecule = molecule;
-        this.name = name;
-        this.inchi = inchi;
-        this.amount = amount;
-        this.units = units;
+    public ReagentUse(Reagent reagent, Amount units) {
+        this.reagent = reagent;
+        this.amount = units;
     }
 
-    public ReagentUse(IAtomContainer molecule, String name, double amount, String units) throws CDKException {
-        this.molecule = molecule;
-        this.name = name;
-        this.amount = amount;
-        this.units = units;
-
-        this.inchi = InChIGeneratorFactory.getInstance().getInChIGenerator(molecule).getInchi();
+    public ReagentUse(Reagent reagent) {
+        this.reagent = reagent;
     }
+
+    public void print() {
+        if(amount != null) {
+            System.out.println(reagent.getName() + " " + amount.getAmount() + " " + amount.getUnits());
+        }
+        else {
+            System.out.println(reagent.getName());
+        }
+    }
+
+    public String toString() {
+        if(amount != null) {
+            return reagent.toString() + ":" + amount.toString();
+        }
+        else {
+            return reagent.toString();
+        }
+    }
+
 }
