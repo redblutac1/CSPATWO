@@ -1,4 +1,4 @@
-package model;
+package com.chem.cs5132_patwo.model;
 
 public class Node<T> {
     Node<T>[] neighbours; //Package accessibility

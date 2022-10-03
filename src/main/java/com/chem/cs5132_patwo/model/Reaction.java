@@ -1,4 +1,4 @@
-package model;
+package com.chem.cs5132_patwo.model;
 
 import java.util.ArrayList;
 

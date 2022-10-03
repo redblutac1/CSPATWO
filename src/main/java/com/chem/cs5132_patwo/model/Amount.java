@@ -1,4 +1,4 @@
-package model;
+package com.chem.cs5132_patwo.model;
 
 public class Amount implements Comparable<Amount>{
     private String units;

@@ -1,4 +1,4 @@
-package model;
+package com.chem.cs5132_patwo.model;
 
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.depict.DepictionGenerator;
