@@ -1,5 +1,6 @@
-package com.chem.cs5132_patwo.model;
+package com.chem.cs5132_patwo.model.Tree;
 
+/** DO NOT MODIFY THIS CLASS NODE<T> **/
 public class Node<T> {
     Node<T>[] neighbours; //Package accessibility
     private T item;

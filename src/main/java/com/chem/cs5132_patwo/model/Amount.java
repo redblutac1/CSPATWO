@@ -1,5 +1,7 @@
 package com.chem.cs5132_patwo.model;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 public class Amount implements Comparable<Amount>{
     private String units;
     private double amount;
@@ -21,8 +23,7 @@ public class Amount implements Comparable<Amount>{
 
     @Override
     public int compareTo(Amount o) {
-        return 0;
-//        return ArrayUtils.indexOf(order, o.getUnits()) - ArrayUtils.indexOf(order, units);
+        return ArrayUtils.indexOf(order, o.getUnits()) - ArrayUtils.indexOf(order, units);
     }
 
     public String toString() {
