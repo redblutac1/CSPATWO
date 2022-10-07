@@ -23,7 +23,7 @@ public class HelloApplication extends Application {
     // CHANGE TABS
     public static void openExampleCompoundsTab() {
         try {
-            scene.setRoot(FXMLLoader.load(HelloApplication.class.getResource("/Displacement.fxml")));
+            scene.setRoot(FXMLLoader.load(HelloApplication.class.getResource("/example-compounds.fxml")));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -31,7 +31,7 @@ public class HelloApplication extends Application {
 
     public static void openMyCompoundsTab() {
         try {
-            scene.setRoot(FXMLLoader.load(HelloApplication.class.getResource("/Displacement.fxml")));
+            scene.setRoot(FXMLLoader.load(HelloApplication.class.getResource("/example-compounds.fxml")));
         } catch (IOException e) {
             e.printStackTrace();
         }
