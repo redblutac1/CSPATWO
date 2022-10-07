@@ -1,4 +1,4 @@
-package com.example.cs5132_patwo.model;
+package com.example.cs5132_patwo;
 
 import java.util.ArrayList;
 

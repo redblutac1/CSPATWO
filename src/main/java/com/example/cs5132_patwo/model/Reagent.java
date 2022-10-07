@@ -32,8 +32,9 @@ public class Reagent implements Comparable<Reagent> {
         return name;
     }
 
+    // TODO: I Changed this btw I removed inchi
     public String toString() {
-        return name + ":" + inchi;
+        return name;
     }
 
     // TODO: Rethink this thingy later.

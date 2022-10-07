@@ -1,6 +1,4 @@
-package com.example.cs5132_patwo.model;
-
-import java.util.Arrays;
+package com.example.cs5132_patwo;
 
 /** DO NOT MODIFY THIS CLASS NODE<T> **/
 public class Node<T> {

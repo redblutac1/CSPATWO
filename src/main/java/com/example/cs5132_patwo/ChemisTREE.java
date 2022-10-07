@@ -1,4 +1,4 @@
-package com.example.cs5132_patwo.model;
+package com.example.cs5132_patwo;
 
 import java.util.ArrayList;
 
@@ -39,5 +39,15 @@ public class ChemisTREE<T> {
 
     public Node<T>[] getChildren() {
         return root.neighbours;
+    }
+
+    public String[] getStringChildren() {
+        String[] stringNeighbours = new String[getNumNeighbours()];
+
+        for (int i = 0; i < getNumNeighbours(); i++) {
+            stringNeighbours[i] = root.neighbours[i].toString();
+        }
+
+        return stringNeighbours;
     }
 }
