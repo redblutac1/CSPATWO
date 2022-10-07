@@ -1,5 +1,7 @@
 package com.example.cs5132_patwo.model;
 
+import java.util.Arrays;
+
 /** DO NOT MODIFY THIS CLASS NODE<T> **/
 public class Node<T> {
     Node<T>[] neighbours; //Package accessibility
@@ -39,6 +41,11 @@ public class Node<T> {
     // Mutator method sets the item to be stored in Node
     public void setItem(T item) {
         this.item = item;
+    }
+
+    @Override
+    public String toString() {
+        return item.toString();
     }
 }
 

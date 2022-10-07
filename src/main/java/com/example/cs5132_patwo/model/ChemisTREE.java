@@ -2,32 +2,42 @@ package com.example.cs5132_patwo.model;
 
 import java.util.ArrayList;
 
-public class ChemisTREE<T extends Comparable<? super T>> {
-    private final Node<Reagent> root;
-    private final ArrayList<Node<Reagent>> reactants;
+public class ChemisTREE<T> {
+    private final ReagentNode<T> root;
 
-    public ChemisTREE(Reagent product, ArrayList<Reagent> reactants) {
-        this.root = new Node<Reagent>(product);
-        this.reactants = new ArrayList<Node<Reagent>>();
-
-        for (Reagent r : reactants) {
-            this.reactants.add(new Node<Reagent>(r));
-        }
+    public ChemisTREE(ArrayList<T> reagents) {
+        if (reagents.size() == 0) throw new IllegalArgumentException("Empty item array!");
+        root = new ReagentNode(reagents.get(0), 20); // It is reasonably assumed that chemical reactions will not have more than 20 reactants
+        root.addNeighbours(reagents);
     }
 
-    public void insert(Reagent reagent) {
-        reactants.add(new Node<Reagent>(reagent));
+    // This is for superChemisTREE construction. It is the tree that contains all the reaction pathways.
+    // TODO: MAKE NEIGHBOURS SUCH THAT IT AUTO EXPANDS AND AUTO COPIES. Let us limit to 2000.
+    public ChemisTREE() {
+        root = new ReagentNode<T>(null, 1000);
     }
 
-    public int numChildren() {
-        return reactants.size();
+    public void insert(ReagentNode<T> reagent) {
+        root.addNeighbour(reagent);
     }
 
-    public Node<Reagent> getRoot() {
+    public void insert(T reagent) {
+        root.addNeighbour(reagent);
+    }
+
+    public int getNumNeighbours() {
+        return root.getNumNeighbours();
+    }
+
+    public ReagentNode<T> getRoot() {
         return root;
     }
 
-    public Reagent getProduct() {
+    public T getProduct() {
         return root.getItem();
+    }
+
+    public Node<T>[] getChildren() {
+        return root.neighbours;
     }
 }
