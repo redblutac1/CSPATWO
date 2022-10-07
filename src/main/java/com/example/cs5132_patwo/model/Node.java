@@ -1,4 +1,4 @@
-package com.chem.cs5132_patwo.model.Tree;
+package com.example.cs5132_patwo.model;
 
 /** DO NOT MODIFY THIS CLASS NODE<T> **/
 public class Node<T> {

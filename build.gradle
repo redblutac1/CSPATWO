@@ -5,7 +5,7 @@ plugins {
     id 'org.beryx.jlink' version '2.24.1'
 }
 
-group 'com.chem'
+group 'com.example.cs5132_patwo'
 version '1.0-SNAPSHOT'
 
 repositories {
@@ -39,8 +39,8 @@ tasks.withType(JavaCompile) {
 }
 
 application {
-    mainModule = 'com.chem.cs5132_patwo'
-    mainClass = 'com.chem.cs5132_patwo.HelloApplication'
+    mainModule = 'com.example.cs5132_patwo'
+    mainClass = 'com.example.cs5132_patwo.HelloApplication'
 }
 
 javafx {

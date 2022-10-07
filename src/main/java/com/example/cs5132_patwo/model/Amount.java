@@ -1,4 +1,4 @@
-package com.chem.cs5132_patwo.model;
+package com.example.cs5132_patwo.model;
 
 import org.apache.commons.lang3.ArrayUtils;
 

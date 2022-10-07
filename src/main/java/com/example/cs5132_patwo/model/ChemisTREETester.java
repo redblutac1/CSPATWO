@@ -1,6 +1,5 @@
-package com.chem.cs5132_patwo.model.Tree;
+package com.example.cs5132_patwo.model;
 
-import com.chem.cs5132_patwo.model.Reagent;
 import org.openscience.cdk.exception.CDKException;
 
 import java.io.BufferedReader;
