@@ -1,8 +1,10 @@
 package com.example.cs5132_patwo;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ReagentNode<T> extends Node<T> {
+    public static final int MAX_NEIGHBOURS = 10; // It is reasonably assumed that chemical reactions will not have more than 10 reactants.
     private int numNeighbours; // Those that are not null
 
     public ReagentNode(T item) {
@@ -25,6 +27,13 @@ public class ReagentNode<T> extends Node<T> {
         this.numNeighbours = 0;
     }
 
+    public ReagentNode<T> findNode(String name) {
+        for (Node<T> n : neighbours) {
+            if (n.toString().equals(name)) return (ReagentNode<T>) n;
+        }
+        return null;
+    }
+
     public void addNeighbour(T neighbour) {
         neighbours[getNumNeighbours()] = new ReagentNode<T>(neighbour);
         numNeighbours++;
@@ -35,9 +44,9 @@ public class ReagentNode<T> extends Node<T> {
         numNeighbours++;
     }
 
-    public void addNeighbours(ArrayList<T> neighbours) {
+    public void addNeighbours(List<T> neighbours) {
         for (int i = 0; i < neighbours.size(); i++) {
-            this.neighbours[i + numNeighbours] = new ReagentNode<T>(neighbours.get(i), 20); // It is reasonably assumed that chemical reactions will not have more than 20 reactants
+            this.neighbours[i + numNeighbours] = new ReagentNode<T>(neighbours.get(i), MAX_NEIGHBOURS);
         }
         numNeighbours += neighbours.size();
     }

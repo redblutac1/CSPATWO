@@ -32,6 +32,8 @@ public class Reagent implements Comparable<Reagent> {
         return name;
     }
 
+    public IAtomContainer getMolecule() { return molecule; }
+
     // TODO: I Changed this btw I removed inchi
     public String toString() {
         return name;

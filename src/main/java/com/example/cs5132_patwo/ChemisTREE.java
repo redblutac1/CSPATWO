@@ -7,8 +7,8 @@ public class ChemisTREE<T> {
 
     public ChemisTREE(ArrayList<T> reagents) {
         if (reagents.size() == 0) throw new IllegalArgumentException("Empty item array!");
-        root = new ReagentNode(reagents.get(0), 20); // It is reasonably assumed that chemical reactions will not have more than 20 reactants
-        root.addNeighbours(reagents);
+        root = new ReagentNode(reagents.get(0), ReagentNode.MAX_NEIGHBOURS);
+        root.addNeighbours(reagents.subList(1, reagents.size()));
     }
 
     // This is for superChemisTREE construction. It is the tree that contains all the reaction pathways.
@@ -23,6 +23,10 @@ public class ChemisTREE<T> {
 
     public void insert(T reagent) {
         root.addNeighbour(reagent);
+    }
+
+    public ReagentNode<T> findNode(String name) {
+        return root.findNode(name);
     }
 
     public int getNumNeighbours() {
