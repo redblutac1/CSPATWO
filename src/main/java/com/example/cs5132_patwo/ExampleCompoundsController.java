@@ -84,7 +84,7 @@ public class ExampleCompoundsController implements Initializable {
         HelloApplication.returnToMenu();
     }
 
-    synchronized public void showSynthesis(ActionEvent actionEvent) {
+    public void showSynthesis(ActionEvent actionEvent) {
         if (comboBox.getSelectionModel().getSelectedItem() != null) {
             String product = comboBox.getSelectionModel().getSelectedItem().toString();
             ReagentNode<Reagent> reagentNode = HelloApplication.superChemisTREE.findNode(product);
@@ -111,7 +111,7 @@ public class ExampleCompoundsController implements Initializable {
         }
     }
 
-    synchronized public void moleculeToFile(IAtomContainer container, String name) throws CDKException, IOException, InterruptedException {
+    public void moleculeToFile(IAtomContainer container, String name) throws CDKException, IOException, InterruptedException {
         DepictionGenerator dg = new DepictionGenerator().withSize(256, 256).withAtomColors();
         dg.depict(container).writeTo("src/main/resources/molecules/" + name + ".png");
     }

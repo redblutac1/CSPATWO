@@ -61,7 +61,7 @@ public class HelloApplication extends Application {
         }
 
         ArrayList<ChemisTREE<Reagent>> chemisTREEs = new ArrayList<>();
-        superChemisTREE = new ChemisTREE<>();
+        superChemisTREE = new ChemisTREE<Reagent>(new Reagent("ROOT"));
 
         for (ArrayList<Reagent> reagent : allReagents) {
             ChemisTREE<Reagent> chemisTREE = new ChemisTREE<Reagent>(reagent);

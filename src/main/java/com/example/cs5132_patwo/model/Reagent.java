@@ -24,9 +24,13 @@ public class Reagent implements Comparable<Reagent> {
     public Reagent(IAtomContainer molecule, String name) throws CDKException {
         this.molecule = molecule;
         this.name = name;
-
         this.inchi = InChIGeneratorFactory.getInstance().getInChIGenerator(molecule).getInchi();
     }
+
+    public Reagent(String name) {
+        this(null, name, null);
+    }
+
 
     public String getName() {
         return name;

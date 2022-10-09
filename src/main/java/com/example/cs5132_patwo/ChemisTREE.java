@@ -1,6 +1,7 @@
 package com.example.cs5132_patwo;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class ChemisTREE<T> {
     private final ReagentNode<T> root;
@@ -11,10 +12,16 @@ public class ChemisTREE<T> {
         root.addNeighbours(reagents.subList(1, reagents.size()));
     }
 
+    public ChemisTREE(T[] reagents) {
+        if (reagents.length == 0) throw new IllegalArgumentException("Empty item array!");
+        root = new ReagentNode(reagents[0], ReagentNode.MAX_NEIGHBOURS);
+        root.addNeighbours(Arrays.copyOfRange(reagents, 1, reagents.length));
+    }
+
     // This is for superChemisTREE construction. It is the tree that contains all the reaction pathways.
     // TODO: MAKE NEIGHBOURS SUCH THAT IT AUTO EXPANDS AND AUTO COPIES. Let us limit to 2000.
-    public ChemisTREE() {
-        root = new ReagentNode<T>(null, 1000);
+    public ChemisTREE(T root) {
+        this.root = new ReagentNode<T>(root, 3);
     }
 
     public void insert(ReagentNode<T> reagent) {

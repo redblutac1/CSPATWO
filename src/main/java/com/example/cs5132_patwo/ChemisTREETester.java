@@ -1,16 +1,37 @@
 package com.example.cs5132_patwo;
 
 import com.example.cs5132_patwo.model.Reagent;
-import org.openscience.cdk.exception.CDKException;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.regex.Pattern;
 
 public class ChemisTREETester {
+    public static void main(String[] args) {
+        ChemisTREE<Reagent> tree1 = new ChemisTREE<>(new Reagent[]{new Reagent("A1"), new Reagent("B1"), new Reagent("B2"), new Reagent("B3"), new Reagent("B4")});
+        ChemisTREE<Reagent> tree2 = new ChemisTREE<>(new Reagent[]{new Reagent("A2"), new Reagent("B5"), new Reagent("B6"), new Reagent("B7")});
+        ChemisTREE<Reagent> tree3 = new ChemisTREE<>(new Reagent[]{new Reagent("A3"), new Reagent("B8"), new Reagent("B9")});
+
+        ChemisTREE<Reagent> rootOfAll = new ChemisTREE<>(new Reagent("ROOT"));
+        rootOfAll.insert(tree1.getRoot());
+        rootOfAll.insert(tree2.getRoot());
+        rootOfAll.insert(tree3.getRoot());
+
+        System.out.println(Arrays.toString(rootOfAll.getChildren()[1].neighbours));
+
+        System.out.println(Arrays.toString(rootOfAll.getRoot().neighbours));
+        String serial = rootOfAll.getRoot().serialize();
+        System.out.println(serial);
+
+        ReagentNode<Reagent> notStack = rootOfAll.getRoot().deserialize(serial);
+
+//        System.out.println(stack.size());
+//        while (stack.size() >= 2) stack.pop();
+
+        System.out.println(Arrays.toString(notStack.neighbours));
+        System.out.println(Arrays.toString(notStack.neighbours[0].neighbours));
+        System.out.println(Arrays.toString(notStack.neighbours[1].neighbours));
+        System.out.println(Arrays.toString(notStack.neighbours[2].neighbours));
+    }
+
 //    public static void main(String[] args) {
 //        ArrayList<ArrayList<Reagent>> allReagents = new ArrayList<>();
 //
