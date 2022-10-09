@@ -70,8 +70,6 @@ public class ReagentNode<T> extends Node<T> {
     }
 
     public String serialize(Node<T> node, HashSet<String> visited, StringBuilder str) {
-        System.out.println("Hi");
-        System.out.println(node == null);
         if (node == null) return str.toString();
 
         visited.add(node.toString());
