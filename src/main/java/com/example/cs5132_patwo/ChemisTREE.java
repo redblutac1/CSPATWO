@@ -21,7 +21,7 @@ public class ChemisTREE<T> {
     // This is for superChemisTREE construction. It is the tree that contains all the reaction pathways.
     // TODO: MAKE NEIGHBOURS SUCH THAT IT AUTO EXPANDS AND AUTO COPIES. Let us limit to 2000.
     public ChemisTREE(T root) {
-        this.root = new ReagentNode<T>(root, 3);
+        this.root = new ReagentNode<T>(root, 300);
     }
 
     public void insert(ReagentNode<T> reagent) {
