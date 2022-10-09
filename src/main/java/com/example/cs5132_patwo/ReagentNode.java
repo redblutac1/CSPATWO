@@ -97,8 +97,6 @@ public class ReagentNode<T> extends Node<T> {
                 if (stack.size() > 0) {
                     ReagentNode<Reagent> parentNode = stack.peek();
                     parentNode.addNeighbour(childNode);
-                    System.out.println("PARENT");
-                    System.out.println(parentNode);
                 }
             } else {
                 stack.push(new ReagentNode<Reagent>(new Reagent(node), 10));
