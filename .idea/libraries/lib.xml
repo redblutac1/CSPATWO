@@ -1,10 +1,16 @@
 <component name="libraryTable">
   <library name="lib">
     <CLASSES>
-      <root url="file://$USER_HOME$/OneDrive/Desktop/javafx-sdk-19/lib" />
+      <root url="jar://$USER_HOME$/Documents/lib/javafx-swt.jar!/" />
+      <root url="jar://$USER_HOME$/Documents/lib/javafx.base.jar!/" />
+      <root url="jar://$USER_HOME$/Documents/lib/javafx.controls.jar!/" />
+      <root url="jar://$USER_HOME$/Documents/lib/javafx.fxml.jar!/" />
+      <root url="jar://$USER_HOME$/Documents/lib/javafx.graphics.jar!/" />
+      <root url="jar://$USER_HOME$/Documents/lib/javafx.media.jar!/" />
+      <root url="jar://$USER_HOME$/Documents/lib/javafx.swing.jar!/" />
+      <root url="jar://$USER_HOME$/Documents/lib/javafx.web.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
-    <jarDirectory url="file://$USER_HOME$/OneDrive/Desktop/javafx-sdk-19/lib" recursive="false" />
   </library>
 </component>

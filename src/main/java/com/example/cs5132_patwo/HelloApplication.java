@@ -2,10 +2,13 @@ package com.example.cs5132_patwo;
 
 import com.example.cs5132_patwo.model.Reagent;
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import org.openscience.cdk.exception.CDKException;
 
 import java.io.BufferedReader;
@@ -13,11 +16,13 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Stack;
 import java.util.regex.Pattern;
 
 public class HelloApplication extends Application {
     private static Scene scene;
     public static ChemisTREE<Reagent> superChemisTREE;
+    public static Stack<Reagent> compoundStack;
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -29,6 +34,15 @@ public class HelloApplication extends Application {
         stage.show();
 
         initialiseExampleChemisTREEs("text.txt");
+
+        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent event) {
+                MyCompoundsController.save();
+                Platform.exit();
+                System.exit(0);
+            }
+        });
     }
 
     public void initialiseExampleChemisTREEs(String textFilePath) {
@@ -84,7 +98,7 @@ public class HelloApplication extends Application {
 
     public static void openMyCompoundsTab() {
         try {
-            scene.setRoot(FXMLLoader.load(HelloApplication.class.getResource("/example-compounds.fxml")));
+            scene.setRoot(FXMLLoader.load(HelloApplication.class.getResource("/my-compounds.fxml")));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -93,6 +107,14 @@ public class HelloApplication extends Application {
     public static void returnToMenu() {
         try {
             scene.setRoot(FXMLLoader.load(HelloApplication.class.getResource("/hello-view.fxml")));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void openExploreTab(){
+        try {
+            scene.setRoot(FXMLLoader.load(HelloApplication.class.getResource("/explore-compound.fxml")));
         } catch (IOException e) {
             e.printStackTrace();
         }
