@@ -31,7 +31,7 @@ public class MyCompoundsController implements Initializable {
     public Button backButton;
 
     public static void save() {
-        if (mySuperChemisTREE.getRoot().getNumNeighbours() == 0) return;
+        if (mySuperChemisTREE == null || mySuperChemisTREE.getRoot().getNumNeighbours() == 0) return;
         try {
             PrintWriter output = new PrintWriter(mySuperChemisTREEPath);
             output.println(mySuperChemisTREE.getRoot().serialize());

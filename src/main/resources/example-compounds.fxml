@@ -11,7 +11,7 @@
     <top>
         <HBox alignment="CENTER" prefHeight="128.0" prefWidth="890.0" BorderPane.alignment="CENTER">
             <children>
-                <Button id="backButton" fx:id="modeButton" mnemonicParsing="false" onAction="#returnToMenu"
+                <Button id="backButton" fx:id="backButton" mnemonicParsing="false" onAction="#returnToMenu"
                         prefHeight="45.0" prefWidth="45.0" text="🡰"/>
                 <Label fx:id="headerLabel" alignment="BOTTOM_LEFT" prefHeight="88.0" prefWidth="760.0"
                        text="Example Compounds" textAlignment="RIGHT">

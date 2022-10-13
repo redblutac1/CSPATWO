@@ -26,6 +26,10 @@ public class HelloApplication extends Application {
     public static Stack<Reagent> compoundStack;
     private static Scene scene;
 
+    public static void main(String[] args) {
+        launch();
+    }
+
     // CHANGE TABS
     public static void openExampleCompoundsTab() {
         try {
@@ -45,7 +49,7 @@ public class HelloApplication extends Application {
 
     public static void returnToMenu() {
         try {
-            scene.setRoot(FXMLLoader.load(HelloApplication.class.getResource("/hello-view.fxml")));
+            scene.setRoot(FXMLLoader.load(HelloApplication.class.getResource("/menu.fxml")));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -59,15 +63,13 @@ public class HelloApplication extends Application {
         }
     }
 
-    public static void main(String[] args) {
-        launch();
-    }
-
     @Override
     public void start(Stage stage) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/hello-view.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/menu.fxml"));
         stage.setTitle("ChemisTREE: The Chemical Database You Never Knew You Needed");
         scene = new Scene(root, 960, 540);
+        scene.getStylesheets().clear();
+        scene.getStylesheets().add(HelloApplication.class.getResource("/light.css").toExternalForm());
         stage.setScene(scene);
         stage.show();
 
