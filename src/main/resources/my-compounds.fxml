@@ -45,9 +45,9 @@
                   <Button fx:id="exploreButton" mnemonicParsing="false" onAction="#explore" text="Explore" />
                </children>
             </HBox>
-            <ListView fx:id="compoundsListView" prefHeight="246.0" prefWidth="507.0">
+            <ListView fx:id="compoundsListView" prefHeight="280.0" prefWidth="846.0">
                <VBox.margin>
-                  <Insets top="20.0" />
+                  <Insets top="10.0" />
                </VBox.margin>
             </ListView>
          </children>

@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Stack;
 
 public class ReagentNode<T> extends Node<T> {
-    public static final int MAX_NEIGHBOURS = 10; // It is reasonably assumed that chemical reactions will not have more than 10 reactants.
+    public static final int MAX_NEIGHBOURS = 100;
     private int numNeighbours; // Number of neighbours that are not null
 
     public ReagentNode(T item) {
@@ -49,7 +49,7 @@ public class ReagentNode<T> extends Node<T> {
                     parentNode.addNeighbour(childNode);
                 }
             } else {
-                stack.push(new ReagentNode<Reagent>(new Reagent(node), 10));
+                stack.push(new ReagentNode<Reagent>(new Reagent(node), MAX_NEIGHBOURS));
             }
         }
         return root;

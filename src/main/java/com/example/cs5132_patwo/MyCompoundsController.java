@@ -9,6 +9,7 @@ import javafx.scene.control.*;
 import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -39,7 +40,6 @@ public class MyCompoundsController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        //TODO: implement save
     }
 
     @Override
@@ -79,9 +79,28 @@ public class MyCompoundsController implements Initializable {
             dialog.setTitle("Invalid name");
             dialog.setContentText("Please do not include # or $ in your compound name.");
             dialog.getDialogPane().getButtonTypes().add(ButtonType.OK);
+            dialog.showAndWait();
             return;
         }
         String[] compoundArray = compoundString.split("\\|");
+
+        if (compoundArray.length <= 1) { //prevent issues with serialising
+            Dialog<String> dialog = new Dialog<>();
+            dialog.setTitle("Invalid input");
+            dialog.setContentText("Please ensure that you have at least one product and one reactant.");
+            dialog.getDialogPane().getButtonTypes().add(ButtonType.OK);
+            dialog.showAndWait();
+            return;
+        }
+
+        if (Arrays.asList(compoundArray).contains("")) { //prevent issues with serialising
+            Dialog<String> dialog = new Dialog<>();
+            dialog.setTitle("Empty input");
+            dialog.setContentText("Please ensure that you do not have any empty inputs.");
+            dialog.getDialogPane().getButtonTypes().add(ButtonType.OK);
+            dialog.showAndWait();
+            return;
+        }
 
         ReagentNode<Reagent>[] reactants = new ReagentNode[compoundArray.length - 1];
         for (int i = 1; i < compoundArray.length; i++) {
