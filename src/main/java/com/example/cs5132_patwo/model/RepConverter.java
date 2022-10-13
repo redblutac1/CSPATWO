@@ -1,8 +1,18 @@
 package com.example.cs5132_patwo.model;
 
+import com.example.cs5132_patwo.model.Amount;
+import com.example.cs5132_patwo.model.Reaction;
+import com.example.cs5132_patwo.model.Reagent;
+import com.example.cs5132_patwo.model.ReagentUse;
+import org.apache.commons.lang3.StringUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.depict.DepictionGenerator;
 import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.exception.InvalidSmilesException;
+import org.openscience.cdk.inchi.InChIGenerator;
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
 import org.openscience.cdk.inchi.InChIToStructure;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -16,8 +26,9 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
+
+import org.json.JSONObject;
 
 public class RepConverter {
 
@@ -35,6 +46,13 @@ public class RepConverter {
         IAtomContainer container = parser.parseSmiles(smiles);
 
         return container;
+    }
+
+    public static String toInChI(IAtomContainer molecule) throws CDKException {
+        InChIGeneratorFactory factory = InChIGeneratorFactory.getInstance();
+        InChIGenerator gen = factory.getInChIGenerator(molecule);
+
+        return gen.getInchi();
     }
 
     public static Reaction readCML(File file) {
@@ -97,33 +115,240 @@ public class RepConverter {
         bw.close();
     }
 
+    public static JSONObject ORDtoJSON(String line) {
+        String[] args = line.split(" ");
+        //System.out.println(Arrays.toString(args));
+
+        boolean inQuotes = false;
+        String key = null;
+
+        JSONObject json = new JSONObject();
+        Stack<JSONObject> objs = new Stack();
+        objs.add(json);
+        String build = "";
+        for(String arg : args) {
+            if(arg.equals("")) {
+                continue;
+            }
+            if(arg.equals("{")) {
+                if(key != null) {
+                    JSONObject newObj = new JSONObject();
+                    if(objs.peek().has(key)) {
+                        if(objs.peek().get(key).getClass().equals(JSONObject.class)) {
+                            JSONArray jsonArray = new JSONArray();
+                            jsonArray.put(objs.peek().get(key));
+                            objs.peek().put(key, jsonArray);
+                        }
+
+                        objs.peek().getJSONArray(key).put(newObj);
+                    }
+                    else {
+                        if(key.equals("inputs") || key.equals("outcomes") || key.equals("products") || key.equals("identifiers") || key.equals("amount") || key.equals("measurements") || key.equals("components")) {
+                            JSONArray jsonArray = new JSONArray();
+                            jsonArray.put(newObj);
+                            objs.peek().put(key, jsonArray);
+                        }
+                        else {
+                            objs.peek().put(key, newObj);
+                        }
+                    }
+
+                    objs.add(newObj);
+                    key = null;
+                }
+            }
+            else if(arg.equals("}")) {
+                objs.pop();
+            }
+            else {
+                if(key == null) {
+                    key = arg.replace(":", "");
+                }
+                else {
+                    if(!inQuotes && StringUtils.countMatches(arg, "\"") % 2 == 1) {
+                        build = arg.replace("\"", "");
+                        inQuotes = true;
+                    }
+                    else if(inQuotes && StringUtils.countMatches(arg, "\"") % 2 == 1) {
+                        build += " " + arg.replace("\"", "");
+                        inQuotes = false;
+                    }
+                    else if(inQuotes) {
+                        build += " " + arg;
+                        arg = build;
+                    }
+                    if(!inQuotes) {
+                        objs.peek().put(key, arg.replace("\"", ""));
+                        key = null;
+                    }
+                }
+            }
+        }
+
+        //StringWriter out = new StringWriter();
+        //json.write(out);
+        //System.out.println(json.toString(2));
+
+
+        return json;
+    }
+
+    public static Reaction parseORD(String line) throws CDKException, InvalidSmilesException {
+        Map<String, String> WORD_TO_UNITS = new HashMap<String, String>();
+        WORD_TO_UNITS.put("MILLIMOLE", "mmol");
+
+
+        JSONObject json = ORDtoJSON(line);
+        Reaction reaction = new Reaction();
+
+        JSONArray inputs = json.getJSONArray("inputs");
+
+        double yield = -1.0;
+
+        for(int i = 0; i < inputs.length(); i++) {
+            JSONObject input = inputs.getJSONObject(i);
+            Amount amountObj = null;
+            try {
+                JSONObject amount = input.getJSONObject("value").getJSONArray("components").getJSONObject(0).getJSONArray("amount").getJSONObject(0);
+                amount = amount.getJSONObject(amount.keys().next());
+
+                if(amount != null) {
+                    amountObj = new Amount(WORD_TO_UNITS.get(amount.getString("units")), Double.parseDouble(amount.getString("value")));
+                }
+            }
+            catch (JSONException e) {continue;}
+
+
+            Map<String, String> ids = new HashMap<>();
+            Reagent reagent = null;
+            JSONArray identifiers = input.getJSONObject("value").getJSONArray("components").getJSONObject(0).getJSONArray("identifiers");
+            for(int j = 0; j < identifiers.length(); j++) {
+                JSONObject identifier = identifiers.getJSONObject(j);
+                ids.put(identifier.getString("type"), identifier.getString("value"));
+            }
+
+            String name = "Unknown";
+            if(ids.containsKey("NAME")) {
+                name = ids.get("NAME");
+            }
+            if(ids.containsKey("INCHI")) {
+                reagent = new Reagent(name, ids.get("INCHI"));
+            }
+            else {
+                reagent = new Reagent(parseSMILES(ids.get("SMILES")), name);
+            }
+
+
+            ReagentUse ru = new ReagentUse(reagent, amountObj);
+
+
+            String role = input.getJSONObject("value").getJSONArray("components").getJSONObject(0).getString("reaction_role");
+            switch(role) {
+                case "REACTANT":
+                    reaction.add(ru, 1);
+                    break;
+                case "SOLVENT":
+                    reaction.add(ru, 3);
+                    break;
+                case "CATALYST":
+                    reaction.add(ru, 4);
+                    break;
+            }
+        }
+
+        JSONArray products = json.getJSONArray("outcomes").getJSONObject(0).getJSONArray("products");
+        for(int i = 0; i < products.length(); i++) {
+            JSONObject product = products.getJSONObject(i);
+            JSONObject amount = null;
+            if(product.has("measurements")) {
+                JSONArray measurements = product.getJSONArray("measurements");
+                for (int j = 0; j < measurements.length(); j++) {
+                    if (measurements.getJSONObject(j).getString("type").equals("AMOUNT")) {
+                        amount = measurements.getJSONObject(j).getJSONArray("amount").getJSONObject(0);
+                        amount = amount.getJSONObject(amount.keys().next());
+                    }
+                    if (measurements.getJSONObject(j).getString("type").equals("YIELD")) {
+                        yield = Double.parseDouble(measurements.getJSONObject(j).getJSONObject("percentage").getString("value"));
+                    }
+                }
+            }
+
+            Amount amountObj = null;
+            if (amount != null) {
+                amountObj = new Amount(WORD_TO_UNITS.get(amount.getString("units")), Double.parseDouble(amount.getString("value")));
+            }
+
+            Map<String, String> ids = new HashMap<>();
+            JSONArray identifiers = product.getJSONArray("identifiers");
+            for(int j = 0; j < identifiers.length(); j++) {
+                JSONObject identifier = identifiers.getJSONObject(j);
+                ids.put(identifier.getString("type"), identifier.getString("value"));
+            }
+
+            Reagent reagent = null;
+            String name = "Unknown";
+            if(ids.containsKey("NAME")) {
+                name = ids.get("NAME");
+            }
+            if(ids.containsKey("INCHI")) {
+                reagent = new Reagent(name, ids.get("INCHI"));
+            }
+            else {
+                reagent = new Reagent(parseSMILES(ids.get("SMILES")), name);
+            }
+
+            ReagentUse ru = new ReagentUse(reagent, amountObj);
+
+
+            reaction.addProduct(ru);
+        }
+
+        reaction.setYield(yield);
+
+
+        return reaction;
+    }
+
     public static void main(String[] args) throws ParserConfigurationException, IOException, SAXException, CDKException {
         ArrayList<Reaction> reactions = new ArrayList();
 
-        File dir = new File("C:\\Users\\Leemen Chan\\Downloads\\Extraction of chemical structures and reactions from the literature_Supporting Information\\ThesisSupportingInformation\\data\\reactionExtraction\\evaluation\\reactionsToBeEvaluated");
+        File dir = new File("new");
 
         FileFilter fileFilter = new FileFilter() {
             @Override
             public boolean accept(File pathname) {
-                return pathname.getName().endsWith(".cml");
+                return pathname.getName().endsWith(".txt");
             }
         };
 
-        for (File file : dir.listFiles()) {
-            if (file.isDirectory()) {
-                File child = file.listFiles(fileFilter)[0];
-                System.out.println(file.getName());
-                System.out.println(child.getName());
-                System.out.println();
-                Reaction reaction = readCML(child);
-                if (reaction == null) {
-                    continue;
+        int filenum = 1;
+        for (File file : dir.listFiles(fileFilter)) {
+            System.out.println();
+            System.out.println(file.getName());
+            System.out.println();
+
+            Scanner scan = new Scanner(file);
+            int rxnnum = 1;
+            while(scan.hasNextLine()) {
+                String line = scan.nextLine();
+                try {
+                    Reaction rxn = parseORD(line);
+                    System.out.println(filenum + " " + rxnnum);
+                    reactions.add(rxn);
                 }
-                reactions.add(reaction);
+                catch(Exception e) {
+                    System.out.println("Reaction skipped.");
+                }
+                rxnnum++;
             }
+            scan.close();
+
+            filenum++;
+
+
         }
 
-        reactionToFile(reactions, "text.txt");
+        reactionToFile(reactions, "ord-total-2.txt");
     }
 
 }
