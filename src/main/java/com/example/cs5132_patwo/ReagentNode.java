@@ -12,6 +12,7 @@ public class ReagentNode<T> extends Node<T> {
 
     public ReagentNode(T item) {
         super(item);
+        neighbours = new ReagentNode[MAX_NEIGHBOURS];
         numNeighbours = 0;
     }
 
@@ -21,7 +22,11 @@ public class ReagentNode<T> extends Node<T> {
     }
 
     public ReagentNode(T item, Node<T>[] neighbours) {
-        super(item, neighbours);
+        this(item);
+        this.neighbours = new ReagentNode[neighbours.length];
+        for (int i = 0; i < neighbours.length; i++) {
+            this.neighbours[i] = new ReagentNode(neighbours[i].getItem());
+        }
         numNeighbours += neighbours.length;
     }
 
