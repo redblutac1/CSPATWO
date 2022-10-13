@@ -6,16 +6,18 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 
+import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.example.cs5132_patwo.HelloApplication.mySuperChemisTREE;
+import static com.example.cs5132_patwo.HelloApplication.mySuperChemisTREEPath;
+
 public class MyCompoundsController implements Initializable {
     static ArrayList<ReagentNode<Reagent>> myCompounds = new ArrayList<>();
-    static ChemisTREE<Reagent> superChemisTREE;
     static ReagentNode<Reagent> set_compound;
     @FXML
     public TextField compoundTextField;
@@ -24,18 +26,44 @@ public class MyCompoundsController implements Initializable {
     @FXML
     public Button exploreButton;
     @FXML
-    public ListView<ReagentNode<Reagent>> compoundsListView;
+    public ListView<Node<Reagent>> compoundsListView;
     @FXML
     public Button backButton;
 
     public static void save() {
+        if (mySuperChemisTREE.getRoot().getNumNeighbours() == 0) return;
+        try {
+            PrintWriter output = new PrintWriter(mySuperChemisTREEPath);
+            output.println(mySuperChemisTREE.getRoot().serialize());
+            output.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         //TODO: implement save
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        superChemisTREE = new ChemisTREE<>(new Reagent("ROOT"));
-        //TODO: write to file on startup
+        File file = new File(mySuperChemisTREEPath);
+
+        if (HelloApplication.mySuperChemisTREE == null) {
+            try {
+                file.createNewFile();
+
+                BufferedReader br = new BufferedReader(new FileReader(mySuperChemisTREEPath));
+                String line = br.readLine();
+                if (line == null) {
+                    HelloApplication.mySuperChemisTREE = new ChemisTREE<>(new Reagent("ROOT"));
+                } else {
+                    mySuperChemisTREE = new ChemisTREE<>(ReagentNode.deserialize(line));
+                    compoundsListView.getItems().addAll(HelloApplication.mySuperChemisTREE.getRoot().getNonNullNeighbours());
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            compoundsListView.getItems().addAll(HelloApplication.mySuperChemisTREE.getRoot().getNonNullNeighbours());
+        }
     }
 
     public void returnToHome(ActionEvent actionEvent) {
@@ -43,7 +71,6 @@ public class MyCompoundsController implements Initializable {
     }
 
     public void addCompound(ActionEvent actionEvent) {
-        System.out.println("HEYYY");
         String compoundString = compoundTextField.getText();
         Pattern pattern = Pattern.compile("[#$]");
         Matcher matcher = pattern.matcher(compoundString);
@@ -60,17 +87,14 @@ public class MyCompoundsController implements Initializable {
         for (int i = 1; i < compoundArray.length; i++) {
             reactants[i - 1] = new ReagentNode<>(new Reagent(compoundArray[i]));
         }
-        System.out.println(Arrays.toString(reactants));
         ReagentNode<Reagent> compound = new ReagentNode<>(new Reagent(compoundArray[0]), reactants);
         myCompounds.add(compound);
-        superChemisTREE.insert(compound);
-        System.out.println(myCompounds);
-        System.out.println(superChemisTREE);
+        mySuperChemisTREE.insert(compound);
         compoundsListView.getItems().add(compound);
     }
 
     public void explore(ActionEvent actionEvent) {
-        ReagentNode<Reagent> compound = compoundsListView.getSelectionModel().getSelectedItem();
+        ReagentNode<Reagent> compound = (ReagentNode<Reagent>) compoundsListView.getSelectionModel().getSelectedItem();
         if (compound == null) {
             Dialog<String> dialog = new Dialog<>();
             dialog.setTitle("No selection");

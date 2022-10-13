@@ -73,7 +73,7 @@ public class ExampleCompoundsController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        comboBox.getItems().addAll(HelloApplication.superChemisTREE.getStringChildren());
+        comboBox.getItems().addAll(HelloApplication.examplesSuperChemisTREE.getStringChildren());
         Collections.sort(comboBox.getItems());
 
         labels = new Label[]{reagent1, reagent2, reagent3, reagent4, reagent5, reagent6, reagent7, reagent8, reagent9, reagent10};
@@ -87,7 +87,7 @@ public class ExampleCompoundsController implements Initializable {
     public void showSynthesis(ActionEvent actionEvent) {
         if (comboBox.getSelectionModel().getSelectedItem() != null) {
             String product = comboBox.getSelectionModel().getSelectedItem().toString();
-            ReagentNode<Reagent> reagentNode = HelloApplication.superChemisTREE.findNode(product);
+            ReagentNode<Reagent> reagentNode = HelloApplication.examplesSuperChemisTREE.findNode(product);
 
             for (int i = 0; i < reagentNode.getNumNeighbours(); i++) {
                 try {

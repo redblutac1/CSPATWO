@@ -10,25 +10,27 @@ import javafx.scene.control.*;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import static com.example.cs5132_patwo.HelloApplication.mySuperChemisTREE;
+
 public class ExploreController implements Initializable {
     @FXML
     public Button homeButton;
     @FXML
     public Label currentCompoundLabel;
     @FXML
-    public ListView<ReagentNode<Reagent>> reactantListView;
+    public ListView<Node<Reagent>> reactantListView;
     @FXML
     public Button goToCompoundButton;
     @FXML
     public Button backButton;
 
     ReagentNode<Reagent> product;
-    ReagentNode<Reagent>[] reactants;
+    Node<Reagent>[] reactants;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         product = MyCompoundsController.set_compound;
-        reactants = (ReagentNode<Reagent>[]) product.neighbours;
+        reactants = product.getNonNullNeighbours();
         currentCompoundLabel.setText(product.getItem().getName());
         reactantListView.setItems(FXCollections.observableArrayList(reactants));
     }
@@ -38,7 +40,7 @@ public class ExploreController implements Initializable {
     }
 
     public void goToCompound(ActionEvent actionEvent) {
-        ReagentNode<Reagent> selection = reactantListView.getSelectionModel().getSelectedItem();
+        Node<Reagent> selection = reactantListView.getSelectionModel().getSelectedItem();
         if (selection == null) {
             Dialog<String> dialog = new Dialog<>();
             dialog.setTitle("No selection");
@@ -65,7 +67,7 @@ public class ExploreController implements Initializable {
     }
 
     private Node<Reagent> searchTree(String name) {
-        ChemisTREE<Reagent> sct = MyCompoundsController.superChemisTREE;
+        ChemisTREE<Reagent> sct = mySuperChemisTREE;
         Node<Reagent>[] nodes = sct.getRoot().neighbours;
         for (Node<Reagent> n : nodes) {
             if (n != null && n.getItem().toString().equals(name)) {

@@ -2,6 +2,7 @@ package com.example.cs5132_patwo;
 
 import com.example.cs5132_patwo.model.Reagent;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Stack;
@@ -33,6 +34,25 @@ public class ReagentNode<T> extends Node<T> {
     public ReagentNode(Node<T> n) {
         super(n);
         this.numNeighbours = 0;
+    }
+
+    public static ReagentNode<Reagent> deserialize(String str) {
+        ReagentNode<Reagent> root = null;
+        Stack<ReagentNode<Reagent>> stack = new Stack<>();
+        String[] tree = str.split("#");
+        for (String node : tree) {
+            if (node.equals("$")) {
+                ReagentNode<Reagent> childNode = stack.pop();
+                if (childNode.toString().equals("ROOT")) root = childNode;
+                if (stack.size() > 0) {
+                    ReagentNode<Reagent> parentNode = stack.peek();
+                    parentNode.addNeighbour(childNode);
+                }
+            } else {
+                stack.push(new ReagentNode<Reagent>(new Reagent(node), 10));
+            }
+        }
+        return root;
     }
 
     public ReagentNode<T> findNode(String name) {
@@ -91,22 +111,7 @@ public class ReagentNode<T> extends Node<T> {
         return str.toString();
     }
 
-    public ReagentNode<Reagent> deserialize(String str) {
-        ReagentNode<Reagent> root = null;
-        Stack<ReagentNode<Reagent>> stack = new Stack<>();
-        String[] tree = str.split("#");
-        for (String node : tree) {
-            if (node.equals("$")) {
-                ReagentNode<Reagent> childNode = stack.pop();
-                if (childNode.toString().equals("ROOT")) root = childNode;
-                if (stack.size() > 0) {
-                    ReagentNode<Reagent> parentNode = stack.peek();
-                    parentNode.addNeighbour(childNode);
-                }
-            } else {
-                stack.push(new ReagentNode<Reagent>(new Reagent(node), 10));
-            }
-        }
-        return root;
+    public Node<T>[] getNonNullNeighbours() {
+        return Arrays.copyOfRange(neighbours, 0, numNeighbours);
     }
 }

@@ -20,18 +20,58 @@ import java.util.Stack;
 import java.util.regex.Pattern;
 
 public class HelloApplication extends Application {
-    private static Scene scene;
-    public static ChemisTREE<Reagent> superChemisTREE;
+    public static ChemisTREE<Reagent> examplesSuperChemisTREE;
+    public static String mySuperChemisTREEPath;
+    public static ChemisTREE<Reagent> mySuperChemisTREE;
     public static Stack<Reagent> compoundStack;
+    private static Scene scene;
+
+    // CHANGE TABS
+    public static void openExampleCompoundsTab() {
+        try {
+            scene.setRoot(FXMLLoader.load(HelloApplication.class.getResource("/example-compounds.fxml")));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void openMyCompoundsTab() {
+        try {
+            scene.setRoot(FXMLLoader.load(HelloApplication.class.getResource("/my-compounds.fxml")));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void returnToMenu() {
+        try {
+            scene.setRoot(FXMLLoader.load(HelloApplication.class.getResource("/hello-view.fxml")));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void openExploreTab() {
+        try {
+            scene.setRoot(FXMLLoader.load(HelloApplication.class.getResource("/explore-compound.fxml")));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void main(String[] args) {
+        launch();
+    }
 
     @Override
     public void start(Stage stage) throws IOException {
-
         Parent root = FXMLLoader.load(getClass().getResource("/hello-view.fxml"));
         stage.setTitle("ChemisTREE: The Chemical Database You Never Knew You Needed");
         scene = new Scene(root, 960, 540);
         stage.setScene(scene);
         stage.show();
+
+        mySuperChemisTREEPath = "src/main/resources/mySuperChemisTREE.txt";
 
         initialiseExampleChemisTREEs("text.txt");
 
@@ -75,52 +115,15 @@ public class HelloApplication extends Application {
         }
 
         ArrayList<ChemisTREE<Reagent>> chemisTREEs = new ArrayList<>();
-        superChemisTREE = new ChemisTREE<Reagent>(new Reagent("ROOT"));
+        examplesSuperChemisTREE = new ChemisTREE<Reagent>(new Reagent("ROOT"));
 
         for (ArrayList<Reagent> reagent : allReagents) {
             ChemisTREE<Reagent> chemisTREE = new ChemisTREE<Reagent>(reagent);
             System.out.println(chemisTREE.getProduct().getName());
-            superChemisTREE.insert(chemisTREE.getRoot());
+            examplesSuperChemisTREE.insert(chemisTREE.getRoot());
         }
 
         System.out.println("\n\n\nsuperChemisTREE!!!");
-        System.out.println(Arrays.toString(superChemisTREE.getChildren()[0].neighbours));
-    }
-
-    // CHANGE TABS
-    public static void openExampleCompoundsTab() {
-        try {
-            scene.setRoot(FXMLLoader.load(HelloApplication.class.getResource("/example-compounds.fxml")));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void openMyCompoundsTab() {
-        try {
-            scene.setRoot(FXMLLoader.load(HelloApplication.class.getResource("/my-compounds.fxml")));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void returnToMenu() {
-        try {
-            scene.setRoot(FXMLLoader.load(HelloApplication.class.getResource("/hello-view.fxml")));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void openExploreTab(){
-        try {
-            scene.setRoot(FXMLLoader.load(HelloApplication.class.getResource("/explore-compound.fxml")));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void main(String[] args) {
-        launch();
+        System.out.println(Arrays.toString(examplesSuperChemisTREE.getChildren()[0].neighbours));
     }
 }

@@ -24,6 +24,10 @@ public class ChemisTREE<T> {
         this.root = new ReagentNode<T>(root, 300);
     }
 
+    public ChemisTREE(ReagentNode<T> root) {
+        this.root = root;
+    }
+
     public void insert(ReagentNode<T> reagent) {
         root.addNeighbour(reagent);
     }
