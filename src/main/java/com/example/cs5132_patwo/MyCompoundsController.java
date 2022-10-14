@@ -74,7 +74,7 @@ public class MyCompoundsController implements Initializable {
         String compoundString = compoundTextField.getText();
         Pattern pattern = Pattern.compile("[#$]");
         Matcher matcher = pattern.matcher(compoundString);
-        if (matcher.find()) { //prevent issues with serialising
+        if (matcher.find()) { //prevent issues with serialising, which uses # and $ as delimiters
             Dialog<String> dialog = new Dialog<>();
             dialog.setTitle("Invalid name");
             dialog.setContentText("Please do not include # or $ in your compound name.");
@@ -84,7 +84,7 @@ public class MyCompoundsController implements Initializable {
         }
         String[] compoundArray = compoundString.split("\\|");
 
-        if (compoundArray.length <= 1) { //prevent issues with serialising
+        if (compoundArray.length <= 1) {
             Dialog<String> dialog = new Dialog<>();
             dialog.setTitle("Invalid input");
             dialog.setContentText("Please ensure that you have at least one product and one reactant.");
@@ -93,7 +93,7 @@ public class MyCompoundsController implements Initializable {
             return;
         }
 
-        if (Arrays.asList(compoundArray).contains("")) { //prevent issues with serialising
+        if (Arrays.asList(compoundArray).contains("")) {
             Dialog<String> dialog = new Dialog<>();
             dialog.setTitle("Empty input");
             dialog.setContentText("Please ensure that you do not have any empty inputs.");

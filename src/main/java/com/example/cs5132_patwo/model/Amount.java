@@ -2,11 +2,10 @@ package com.example.cs5132_patwo.model;
 
 import org.apache.commons.lang3.ArrayUtils;
 
-public class Amount implements Comparable<Amount>{
-    private String units;
-    private double amount;
-
-    private static String[] order = {"mg","mL","mmol","percentYield"};
+public class Amount implements Comparable<Amount> {
+    private static final String[] order = {"mg", "mL", "mmol", "percentYield"};
+    private final String units;
+    private final double amount;
 
     public Amount(String units, double amount) {
         this.units = units;

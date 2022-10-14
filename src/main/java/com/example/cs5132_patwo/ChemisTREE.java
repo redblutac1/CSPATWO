@@ -18,10 +18,9 @@ public class ChemisTREE<T> {
         root.addNeighbours(Arrays.copyOfRange(reagents, 1, reagents.length));
     }
 
-    // This is for superChemisTREE construction. It is the tree that contains all the reaction pathways.
-    // TODO: MAKE NEIGHBOURS SUCH THAT IT AUTO EXPANDS AND AUTO COPIES. Let us limit to 2000.
+    // This constructor is for "superChemisTREEs", which essentially is the root of all other ChemisTREEs. This is why it needs so many neighbours, to ensure that it can contain an arbitrarily large amount of reaction pathways as subtrees.
     public ChemisTREE(T root) {
-        this.root = new ReagentNode<T>(root, 300);
+        this.root = new ReagentNode<T>(root, 30000);
     }
 
     public ChemisTREE(ReagentNode<T> root) {

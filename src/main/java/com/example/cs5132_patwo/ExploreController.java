@@ -14,8 +14,6 @@ import static com.example.cs5132_patwo.HelloApplication.mySuperChemisTREE;
 
 public class ExploreController implements Initializable {
     @FXML
-    public Button homeButton;
-    @FXML
     public Label currentCompoundLabel;
     @FXML
     public ListView<Node<Reagent>> reactantListView;
@@ -33,10 +31,6 @@ public class ExploreController implements Initializable {
         reactants = product.getNonNullNeighbours();
         currentCompoundLabel.setText(product.getItem().getName());
         reactantListView.setItems(FXCollections.observableArrayList(reactants));
-    }
-
-    public void goHome(ActionEvent actionEvent) {
-        HelloApplication.returnToMenu();
     }
 
     public void goToCompound(ActionEvent actionEvent) {

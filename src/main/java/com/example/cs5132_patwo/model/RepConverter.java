@@ -1,9 +1,5 @@
 package com.example.cs5132_patwo.model;
 
-import com.example.cs5132_patwo.model.Amount;
-import com.example.cs5132_patwo.model.Reaction;
-import com.example.cs5132_patwo.model.Reagent;
-import com.example.cs5132_patwo.model.ReagentUse;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,8 +23,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
 import java.util.*;
-
-import org.json.JSONObject;
 
 public class RepConverter {
 
@@ -126,29 +120,27 @@ public class RepConverter {
         Stack<JSONObject> objs = new Stack();
         objs.add(json);
         String build = "";
-        for(String arg : args) {
-            if(arg.equals("")) {
+        for (String arg : args) {
+            if (arg.equals("")) {
                 continue;
             }
-            if(arg.equals("{")) {
-                if(key != null) {
+            if (arg.equals("{")) {
+                if (key != null) {
                     JSONObject newObj = new JSONObject();
-                    if(objs.peek().has(key)) {
-                        if(objs.peek().get(key).getClass().equals(JSONObject.class)) {
+                    if (objs.peek().has(key)) {
+                        if (objs.peek().get(key).getClass().equals(JSONObject.class)) {
                             JSONArray jsonArray = new JSONArray();
                             jsonArray.put(objs.peek().get(key));
                             objs.peek().put(key, jsonArray);
                         }
 
                         objs.peek().getJSONArray(key).put(newObj);
-                    }
-                    else {
-                        if(key.equals("inputs") || key.equals("outcomes") || key.equals("products") || key.equals("identifiers") || key.equals("amount") || key.equals("measurements") || key.equals("components")) {
+                    } else {
+                        if (key.equals("inputs") || key.equals("outcomes") || key.equals("products") || key.equals("identifiers") || key.equals("amount") || key.equals("measurements") || key.equals("components")) {
                             JSONArray jsonArray = new JSONArray();
                             jsonArray.put(newObj);
                             objs.peek().put(key, jsonArray);
-                        }
-                        else {
+                        } else {
                             objs.peek().put(key, newObj);
                         }
                     }
@@ -156,28 +148,23 @@ public class RepConverter {
                     objs.add(newObj);
                     key = null;
                 }
-            }
-            else if(arg.equals("}")) {
+            } else if (arg.equals("}")) {
                 objs.pop();
-            }
-            else {
-                if(key == null) {
+            } else {
+                if (key == null) {
                     key = arg.replace(":", "");
-                }
-                else {
-                    if(!inQuotes && StringUtils.countMatches(arg, "\"") % 2 == 1) {
+                } else {
+                    if (!inQuotes && StringUtils.countMatches(arg, "\"") % 2 == 1) {
                         build = arg.replace("\"", "");
                         inQuotes = true;
-                    }
-                    else if(inQuotes && StringUtils.countMatches(arg, "\"") % 2 == 1) {
+                    } else if (inQuotes && StringUtils.countMatches(arg, "\"") % 2 == 1) {
                         build += " " + arg.replace("\"", "");
                         inQuotes = false;
-                    }
-                    else if(inQuotes) {
+                    } else if (inQuotes) {
                         build += " " + arg;
                         arg = build;
                     }
-                    if(!inQuotes) {
+                    if (!inQuotes) {
                         objs.peek().put(key, arg.replace("\"", ""));
                         key = null;
                     }
@@ -193,7 +180,7 @@ public class RepConverter {
         return json;
     }
 
-    public static Reaction parseORD(String line) throws CDKException, InvalidSmilesException {
+    public static Reaction parseORD(String line) throws CDKException {
         Map<String, String> WORD_TO_UNITS = new HashMap<String, String>();
         WORD_TO_UNITS.put("MILLIMOLE", "mmol");
 
@@ -205,36 +192,36 @@ public class RepConverter {
 
         double yield = -1.0;
 
-        for(int i = 0; i < inputs.length(); i++) {
+        for (int i = 0; i < inputs.length(); i++) {
             JSONObject input = inputs.getJSONObject(i);
             Amount amountObj = null;
             try {
                 JSONObject amount = input.getJSONObject("value").getJSONArray("components").getJSONObject(0).getJSONArray("amount").getJSONObject(0);
                 amount = amount.getJSONObject(amount.keys().next());
 
-                if(amount != null) {
+                if (amount != null) {
                     amountObj = new Amount(WORD_TO_UNITS.get(amount.getString("units")), Double.parseDouble(amount.getString("value")));
                 }
+            } catch (JSONException e) {
+                continue;
             }
-            catch (JSONException e) {continue;}
 
 
             Map<String, String> ids = new HashMap<>();
             Reagent reagent = null;
             JSONArray identifiers = input.getJSONObject("value").getJSONArray("components").getJSONObject(0).getJSONArray("identifiers");
-            for(int j = 0; j < identifiers.length(); j++) {
+            for (int j = 0; j < identifiers.length(); j++) {
                 JSONObject identifier = identifiers.getJSONObject(j);
                 ids.put(identifier.getString("type"), identifier.getString("value"));
             }
 
             String name = "Unknown";
-            if(ids.containsKey("NAME")) {
+            if (ids.containsKey("NAME")) {
                 name = ids.get("NAME");
             }
-            if(ids.containsKey("INCHI")) {
+            if (ids.containsKey("INCHI")) {
                 reagent = new Reagent(name, ids.get("INCHI"));
-            }
-            else {
+            } else {
                 reagent = new Reagent(parseSMILES(ids.get("SMILES")), name);
             }
 
@@ -243,7 +230,7 @@ public class RepConverter {
 
 
             String role = input.getJSONObject("value").getJSONArray("components").getJSONObject(0).getString("reaction_role");
-            switch(role) {
+            switch (role) {
                 case "REACTANT":
                     reaction.add(ru, 1);
                     break;
@@ -257,10 +244,10 @@ public class RepConverter {
         }
 
         JSONArray products = json.getJSONArray("outcomes").getJSONObject(0).getJSONArray("products");
-        for(int i = 0; i < products.length(); i++) {
+        for (int i = 0; i < products.length(); i++) {
             JSONObject product = products.getJSONObject(i);
             JSONObject amount = null;
-            if(product.has("measurements")) {
+            if (product.has("measurements")) {
                 JSONArray measurements = product.getJSONArray("measurements");
                 for (int j = 0; j < measurements.length(); j++) {
                     if (measurements.getJSONObject(j).getString("type").equals("AMOUNT")) {
@@ -280,20 +267,19 @@ public class RepConverter {
 
             Map<String, String> ids = new HashMap<>();
             JSONArray identifiers = product.getJSONArray("identifiers");
-            for(int j = 0; j < identifiers.length(); j++) {
+            for (int j = 0; j < identifiers.length(); j++) {
                 JSONObject identifier = identifiers.getJSONObject(j);
                 ids.put(identifier.getString("type"), identifier.getString("value"));
             }
 
             Reagent reagent = null;
             String name = "Unknown";
-            if(ids.containsKey("NAME")) {
+            if (ids.containsKey("NAME")) {
                 name = ids.get("NAME");
             }
-            if(ids.containsKey("INCHI")) {
+            if (ids.containsKey("INCHI")) {
                 reagent = new Reagent(name, ids.get("INCHI"));
-            }
-            else {
+            } else {
                 reagent = new Reagent(parseSMILES(ids.get("SMILES")), name);
             }
 
@@ -329,14 +315,13 @@ public class RepConverter {
 
             Scanner scan = new Scanner(file);
             int rxnnum = 1;
-            while(scan.hasNextLine()) {
+            while (scan.hasNextLine()) {
                 String line = scan.nextLine();
                 try {
                     Reaction rxn = parseORD(line);
                     System.out.println(filenum + " " + rxnnum);
                     reactions.add(rxn);
-                }
-                catch(Exception e) {
+                } catch (Exception e) {
                     System.out.println("Reaction skipped.");
                 }
                 rxnnum++;

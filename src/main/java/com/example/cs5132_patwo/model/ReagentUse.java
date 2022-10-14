@@ -1,7 +1,7 @@
 package com.example.cs5132_patwo.model;
 
 public class ReagentUse {
-    private Reagent reagent;
+    private final Reagent reagent;
     private Amount amount = null;
 
     public ReagentUse(Reagent reagent, Amount units) {
@@ -14,19 +14,17 @@ public class ReagentUse {
     }
 
     public void print() {
-        if(amount != null) {
+        if (amount != null) {
             System.out.println(reagent.getName() + " " + amount.getAmount() + " " + amount.getUnits());
-        }
-        else {
+        } else {
             System.out.println(reagent.getName());
         }
     }
 
     public String toString() {
-        if(amount != null) {
+        if (amount != null) {
             return reagent.toString() + ":" + amount.toString();
-        }
-        else {
+        } else {
             return reagent.toString();
         }
     }

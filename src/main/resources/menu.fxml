@@ -50,7 +50,7 @@
                                 </Label>
                                 <Text id="menuDescriptionText" fx:id="displacementDescriptionText" lineSpacing="2.0"
                                       strokeType="OUTSIDE" strokeWidth="0.0"
-                                      text="Peruse some reactions from literature here! This tab shows your the syntheses of real-life drug molecules. If you want to do drugs legally in the future, do check this out!"
+                                      text="Peruse some reactions from literature here! This tab shows you the syntheses of real-life drug molecules. If you want to do drugs legally in the future, do check this out!"
                                       wrappingWidth="450.0"/>
                                 <Label id="arrowSymbol" prefHeight="30.0" prefWidth="25.0" text="﹥"/>
                             </children>

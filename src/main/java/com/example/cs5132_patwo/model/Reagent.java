@@ -36,14 +36,14 @@ public class Reagent implements Comparable<Reagent> {
         return name;
     }
 
-    public IAtomContainer getMolecule() { return molecule; }
+    public IAtomContainer getMolecule() {
+        return molecule;
+    }
 
-    // TODO: I Changed this btw I removed inchi
     public String toString() {
         return name;
     }
 
-    // TODO: Rethink this thingy later.
     @Override
     public int compareTo(@NotNull Reagent o) {
         return name.compareTo(o.name);

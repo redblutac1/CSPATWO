@@ -1,14 +1,12 @@
 package com.example.cs5132_patwo.model;
 
-import com.example.cs5132_patwo.model.ReagentUse;
-
 import java.util.ArrayList;
 
 public class Reaction {
-    private ArrayList<ReagentUse> reactants;
-    private ArrayList<ReagentUse> products;
-    private ArrayList<ReagentUse> solvents;
-    private ArrayList<ReagentUse> catalysts;
+    private final ArrayList<ReagentUse> reactants;
+    private final ArrayList<ReagentUse> products;
+    private final ArrayList<ReagentUse> solvents;
+    private final ArrayList<ReagentUse> catalysts;
     private double yield = -1.0;
 
     public Reaction(ArrayList<ReagentUse> reactants, ArrayList<ReagentUse> products, ArrayList<ReagentUse> solvents, ArrayList<ReagentUse> catalysts, int yield) {
@@ -18,6 +16,7 @@ public class Reaction {
         this.catalysts = catalysts;
         this.yield = yield;
     }
+
     public Reaction(ArrayList<ReagentUse> reactants, ArrayList<ReagentUse> products, ArrayList<ReagentUse> solvents, ArrayList<ReagentUse> catalysts) {
         this.reactants = reactants;
         this.products = products;
@@ -71,51 +70,50 @@ public class Reaction {
 
     public void print() {
         System.out.println("Reactants: ");
-        for(ReagentUse r : reactants) {
+        for (ReagentUse r : reactants) {
             r.print();
         }
         System.out.println();
         System.out.println("Products: ");
-        for(ReagentUse r : products) {
+        for (ReagentUse r : products) {
             r.print();
         }
         System.out.println();
         System.out.println("Solvents: ");
-        for(ReagentUse r : solvents) {
+        for (ReagentUse r : solvents) {
             r.print();
         }
         System.out.println();
         System.out.println("Catalysts: ");
-        for(ReagentUse r : catalysts) {
+        for (ReagentUse r : catalysts) {
             r.print();
         }
     }
 
     public String toString() {
         String s = "";
-        for(ReagentUse ru : reactants) {
+        for (ReagentUse ru : reactants) {
             s += ru.toString();
             s += "~";
         }
         s = s.replaceAll("~$", "\\\\");
-        for(ReagentUse ru : products) {
+        for (ReagentUse ru : products) {
             s += ru.toString();
             s += "~";
         }
         s = s.replaceAll("~$", "\\\\");
-        for(ReagentUse ru : solvents) {
+        for (ReagentUse ru : solvents) {
             s += ru.toString();
             s += "~";
         }
         s = s.replaceAll("~$", "\\\\");
-        for(ReagentUse ru : catalysts) {
+        for (ReagentUse ru : catalysts) {
             s += ru.toString();
             s += "~";
         }
-        if(s.charAt(s.length() - 1) == ';') {
+        if (s.charAt(s.length() - 1) == ';') {
             s = s.replaceAll("~$", "\\\\");
-        }
-        else {
+        } else {
             s += "\\";
         }
         s += yield;

@@ -1,6 +1,6 @@
 package com.example.cs5132_patwo;
 
-/** DO NOT MODIFY THIS CLASS NODE<T> **/
+/** DO NOT MODIFY THIS CLASS **/
 public class Node<T> {
     Node<T>[] neighbours; //Package accessibility
     private T item;

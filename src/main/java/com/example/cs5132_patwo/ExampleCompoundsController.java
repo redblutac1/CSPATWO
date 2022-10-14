@@ -93,7 +93,7 @@ public class ExampleCompoundsController implements Initializable {
                 try {
                     String name = reagentNode.neighbours[i].toString();
 
-                    // For the image of the product, set it once only
+                    // This sets the image of the product, set it once only
                     if (i == 0) {
                         moleculeToFile(reagentNode.getItem().getMolecule(), product);
                         productImage.setImage(new Image(new File("src/main/resources/molecules/" + product + ".png").toURI().toString()));
@@ -111,6 +111,7 @@ public class ExampleCompoundsController implements Initializable {
         }
     }
 
+    // This creates the molecular diagram file
     public void moleculeToFile(IAtomContainer container, String name) throws CDKException, IOException, InterruptedException {
         DepictionGenerator dg = new DepictionGenerator().withSize(256, 256).withAtomColors();
         dg.depict(container).writeTo("src/main/resources/molecules/" + name + ".png");
