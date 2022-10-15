@@ -72,6 +72,7 @@ public class HelloApplication extends Application {
 
         initialiseExampleChemisTREEs(new String[]{"text.txt", "ord-total.txt"});
 
+        //save entered compounds in My Compounds tab
         stage.setOnCloseRequest(event -> {
             MyCompoundsController.save();
             Platform.exit();

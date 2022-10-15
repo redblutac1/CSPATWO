@@ -12,6 +12,10 @@ import java.util.ResourceBundle;
 
 import static com.example.cs5132_patwo.HelloApplication.mySuperChemisTREE;
 
+/**
+ For explanation of how this works, see MyCompoundsController.java file
+ **/
+
 public class ExploreController implements Initializable {
     @FXML
     public Label currentCompoundLabel;
@@ -25,6 +29,7 @@ public class ExploreController implements Initializable {
     ReagentNode<Reagent> product;
     Node<Reagent>[] reactants;
 
+    //set up new scene
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         product = MyCompoundsController.set_compound;
@@ -33,6 +38,7 @@ public class ExploreController implements Initializable {
         reactantListView.setItems(FXCollections.observableArrayList(reactants));
     }
 
+    //deeper search
     public void goToCompound(ActionEvent actionEvent) {
         Node<Reagent> selection = reactantListView.getSelectionModel().getSelectedItem();
         if (selection == null) {
@@ -44,7 +50,7 @@ public class ExploreController implements Initializable {
         }
         String name = selection.getItem().getName();
         Node<Reagent> newProduct = searchTree(name);
-        if (newProduct == null) {
+        if (newProduct == null) { //compound has no further breakdowns
             Dialog<String> dialog = new Dialog<>();
             dialog.setTitle("Exploration fail");
             dialog.setContentText("There is no further breakdown for this compound.");
@@ -60,6 +66,7 @@ public class ExploreController implements Initializable {
         HelloApplication.openMyCompoundsTab();
     }
 
+    //algorithm for searching all children of the root (O(n))
     private Node<Reagent> searchTree(String name) {
         ChemisTREE<Reagent> sct = mySuperChemisTREE;
         Node<Reagent>[] nodes = sct.getRoot().neighbours;
