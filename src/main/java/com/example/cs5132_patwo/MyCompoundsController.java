@@ -119,6 +119,8 @@ public class MyCompoundsController implements Initializable {
             return;
         }
 
+        compoundTextField.clear();
+
         //create new compound and add to mycompounds and mySuperChemisTREE
         ReagentNode<Reagent>[] reactants = new ReagentNode[compoundArray.length - 1];
         for (int i = 1; i < compoundArray.length; i++) {
