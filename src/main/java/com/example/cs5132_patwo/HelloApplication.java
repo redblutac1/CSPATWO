@@ -70,9 +70,9 @@ public class HelloApplication extends Application {
 
         mySuperChemisTREEPath = "src/main/resources/mySuperChemisTREE.txt";
 
-        initialiseExampleChemisTREEs(new String[]{"text.txt", "ord-total.txt"});
+        initialiseExampleChemisTREEs(new String[]{"text.txt", "ord-total.txt", "ord_total-2.txt"});
 
-        //save entered compounds in My Compounds tab
+        //save entered compounds in My Compounds tab upon closing app
         stage.setOnCloseRequest(event -> {
             MyCompoundsController.save();
             Platform.exit();

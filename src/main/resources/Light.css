@@ -246,7 +246,6 @@
      -fx-background-color: -DARK-ORANGE-COLOR;
 }
 
-/*TODO: CHECK FOR THE WHOLE THING LATER*/
 .check-box > .box{
 	-fx-border-radius: 0;
 	-fx-border-color: transparent;

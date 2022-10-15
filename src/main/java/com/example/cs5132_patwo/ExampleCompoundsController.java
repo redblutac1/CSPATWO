@@ -84,6 +84,7 @@ public class ExampleCompoundsController implements Initializable {
         HelloApplication.returnToMenu();
     }
 
+    // creates and puts the image of the molecule in the view
     public void showSynthesis(ActionEvent actionEvent) {
         if (comboBox.getSelectionModel().getSelectedItem() != null) {
             String product = comboBox.getSelectionModel().getSelectedItem().toString();

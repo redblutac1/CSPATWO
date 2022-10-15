@@ -43,7 +43,7 @@ public class ReagentNode<T> extends Node<T> {
         for (String node : tree) {
             if (node.equals("$")) {
                 ReagentNode<Reagent> childNode = stack.pop();
-                if (childNode.toString().equals("ROOT")) root = childNode;
+                if (root == null && childNode.toString().equals("ROOT")) root = childNode;
                 if (stack.size() > 0) {
                     ReagentNode<Reagent> parentNode = stack.peek();
                     parentNode.addNeighbour(childNode);
